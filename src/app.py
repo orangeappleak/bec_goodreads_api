@@ -1,7 +1,8 @@
 from flask import jsonify
 from flask import Flask
 
-from src.popular_books import getPopularCategories;
+from src.popular_books import getPopularCategories
+from src.popular_books import getTopFiction
 
 main_app = Flask(__name__)
 
@@ -18,4 +19,10 @@ def Home():
 def popular_books():
     return jsonify({
         'popular_book_categories': getPopularCategories()
+    })
+
+@main_app.route('/popularCategories/topFiction')
+def topFiction():
+    return jsonify({
+        'top_fiction_books': getTopFiction()
     })
