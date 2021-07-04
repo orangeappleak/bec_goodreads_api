@@ -29,7 +29,6 @@ def getTopFiction():
         top_fiction.append({
             "book_name": book.find('img')['alt'],
             "book_image": book.find('img')['src'],
-            "book_ratings": book.find('strong',class_ ="uitext result")
+            "book_ratings": book.find('strong',class_ ="uitext result").text
         })
-
     return top_fiction
