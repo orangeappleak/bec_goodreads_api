@@ -23,7 +23,14 @@ def getTopBooks(route):
 
     topBooks = []
 
-    for book in result:
+    topBooks.append({
+        "book_ratings": result[0].find('strong').text,
+        "book_name" : result[0].find('div',class_="answerWrapper").find('img')['alt'], 
+        "book_image": result[0].find('div',class_="answerWrapper").find('img')['src'],
+        "winner_book_desc": soup.find('div',class_="readable stacked gcaBookDescription").text
+    })
+
+    for book in result[1:]:
         topBooks.append({
             "book_ratings": book.find('strong').text,
             "book_name" : book.find('div',class_="answerWrapper").find('img')['alt'], 
