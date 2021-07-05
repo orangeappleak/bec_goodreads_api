@@ -25,7 +25,9 @@ def getTopBooks(route):
 
     for book in result:
         topBooks.append({
+            "book_ratings": book.find('strong').text,
             "book_name" : book.find('div',class_="answerWrapper").find('img')['alt'], 
+            "book_image": book.find('div',class_="answerWrapper").find('img')['src']
         })
 
     return topBooks
