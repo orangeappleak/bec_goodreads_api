@@ -1,34 +1,31 @@
 import requests
 from bs4 import BeautifulSoup
+categories = []
 
 def getPopularCategories():
     url = "https://www.goodreads.com/choiceawards/best-books-2020"
 
     data = requests.get(url)
     soup = BeautifulSoup(data.content, 'html.parser')
-    categories = []
     result = soup.find('div',class_="categoryContainer").find_all('div',class_="category")
     for category in result:
         categories.append({
+            "category_route" : category.find('a')['href'].split('/')[2],
             "category_name" : category.find('h4',class_="category__copy").text,
             "category_image": category.find('img',class_="category__winnerImage")['src']
         })
     return categories
 
-def getTopFiction():
-    url = "https://www.goodreads.com/choiceawards/best-fiction-books-2020"
-
-    data = requests.get(url)
+def getTopBooks(route):
+    data = requests.get("https://www.goodreads.com/choiceawards/" + route )
     soup = BeautifulSoup(data.content, 'html.parser')
+    result = soup.find('div',class_="pollContents").find_all('div',class_="inlineblock pollAnswer resultShown")
 
-    top_fiction = []
-
-    result = soup.find('div',class_ = "pollContents").find_all('div',class_="inlineblock pollAnswer resultShown")
+    topBooks = []
 
     for book in result:
-        top_fiction.append({
-            "book_name": book.find('img')['alt'],
-            "book_image": book.find('img')['src'],
-            "book_ratings": book.find('strong',class_ ="uitext result").text
+        topBooks.append({
+            "book_name" : book.find('div',class_="answerWrapper").find('img')['alt'], 
         })
-    return top_fiction
+
+    return topBooks
