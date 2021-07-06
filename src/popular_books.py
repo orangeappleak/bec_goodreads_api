@@ -1,8 +1,8 @@
 import requests
 from bs4 import BeautifulSoup
-categories = []
 
 def getPopularCategories():
+    categories = []
     url = "https://www.goodreads.com/choiceawards/best-books-2020"
 
     data = requests.get(url)
