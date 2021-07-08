@@ -1,9 +1,9 @@
 from flask import jsonify
 from flask import Flask
 
-from popular_books import getPopularCategories
-from popular_books import getTopBooks
-from popular_books import find_book
+from src.popular_books import getPopularCategories
+from src.popular_books import getTopBooks
+from src.popular_books import find_book
 
 main_app = Flask(__name__)
 
