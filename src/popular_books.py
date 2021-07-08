@@ -49,7 +49,8 @@ def find_book(url):
 
     bookInfo = [{
         "book_name": result.find('h1',{"id":"bookTitle"}).text,
-        "books_desc": result.find('div',{"id":"description"}).find_all("span")[1].text
+        "books_desc": result.find('div',{"id":"description"}).find_all("span")[1].text,
+        "book_image": result.find('img',{"id":"coverImage"})['src']
     }]
 
     return bookInfo
