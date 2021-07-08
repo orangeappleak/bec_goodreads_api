@@ -46,11 +46,26 @@ def find_book(url):
     data = requests.get('https://www.goodreads.com/book/show/' + url)
     soup = BeautifulSoup(data.content,'html.parser')
     result = soup.find('div',class_ = "leftContainer")
+    right_data = soup.find('div',class_="rightContainer")
+
+    genres = right_data.find_all('div',class_="elementList")
+
+
 
     bookInfo = [{
         "book_name": result.find('h1',{"id":"bookTitle"}).text,
         "books_desc": result.find('div',{"id":"description"}).find_all("span")[1].text,
-        "book_image": result.find('img',{"id":"coverImage"})['src']
+        "book_image": result.find('img',{"id":"coverImage"})['src'],
+        "about_author": {
+            "author_name": right_data.find("div",class_="bookAuthorProfile__name").find('a').text,
+            "author_profile_image": right_data.find('div',class_="bookAuthorProfile__photo")['style'],
+            "author_follower_count": right_data.find('div',class_="bookAuthorProfile__followerCount").text,
+            "author_profile_desc": right_data.find('div',class_="bookAuthorProfile__about").find_all("span")[1].text
+        },
+        "book_genres": []
     }]
 
+    for genre in genres:
+        bookInfo[0]['book_genres'].append(genre.find('div',class_="left").find('a').text)
+    
     return bookInfo
