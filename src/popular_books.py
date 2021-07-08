@@ -27,6 +27,7 @@ def getTopBooks(route):
         "book_ratings": result[0].find('strong').text,
         "book_name" : result[0].find('div',class_="answerWrapper").find('img')['alt'], 
         "book_image": result[0].find('div',class_="answerWrapper").find('img')['src'],
+        "book_url": soup.find("span",class_="cover").find("a")['href'],
         "winner_book_desc": soup.find('div',class_="readable stacked gcaBookDescription").text
     })
 
@@ -34,7 +35,21 @@ def getTopBooks(route):
         topBooks.append({
             "book_ratings": book.find('strong').text,
             "book_name" : book.find('div',class_="answerWrapper").find('img')['alt'], 
-            "book_image": book.find('div',class_="answerWrapper").find('img')['src']
+            "book_image": book.find('div',class_="answerWrapper").find('img')['src'],
+            "book_url": book.find('a',class_="pollAnswer__bookLink")['href']
         })
 
     return topBooks
+
+def find_book(url):
+    print(url)
+    data = requests.get('https://www.goodreads.com/book/show/' + url)
+    soup = BeautifulSoup(data.content,'html.parser')
+    result = soup.find('div',class_ = "leftContainer")
+
+    bookInfo = [{
+        "book_name": result.find('h1',{"id":"bookTitle"}).text,
+        "books_desc": result.find('div',{"id":"description"}).find_all("span")[1].text
+    }]
+
+    return bookInfo
