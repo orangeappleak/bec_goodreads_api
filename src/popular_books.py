@@ -50,6 +50,14 @@ def find_book(url):
 
     genres = right_data.find_all('div',class_="elementList")
 
+    author_desc = ""
+
+    if len(right_data.find('div',class_="bookAuthorProfile_about").find_all("span")) > 0:
+        author_desc = right_data.find('div',class_="bookAuthorProfile_about").find_all("span")[1].text
+    else:
+        author_desc = right_data.find('div',class_="bookAuthorProfile_about").find_all("span")[0].text
+
+
 
 
     bookInfo = [{
@@ -60,7 +68,7 @@ def find_book(url):
             "author_name": right_data.find("div",class_="bookAuthorProfile__name").find('a').text,
             "author_profile_image": right_data.find('div',class_="bookAuthorProfile__photo")['style'],
             "author_follower_count": right_data.find('div',class_="bookAuthorProfile__followerCount").text,
-            "author_profile_desc": right_data.find('div',class_="bookAuthorProfile__about").find_all("span")[1].text
+            "author_profile_desc": author_desc
         },
         "book_genres": []
     }]
