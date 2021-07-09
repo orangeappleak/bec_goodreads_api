@@ -52,7 +52,7 @@ def find_book(url):
 
     author_desc = ""
 
-    if len(right_data.find('div',class_="bookAuthorProfile_about").find_all("span")) > 0:
+    if len(right_data.find('div',class_="bookAuthorProfile__about").find_all("span")) > 0:
         author_desc = right_data.find('div',class_="bookAuthorProfile__about").find_all("span")[1].text
     else:
         author_desc = right_data.find('div',class_="bookAuthorProfile__about").find_all("span")[0].text
