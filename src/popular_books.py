@@ -50,12 +50,14 @@ def find_book(url):
 
     genres = right_data.find_all('div',class_="elementList")
 
-    author_desc = ""
+    author_desc = right_data.find('div',class_="bookAuthorProfile__about").find_all('span')
 
-    if len(right_data.find('div',class_="bookAuthorProfile__about").find_all("span")) > 0:
-        author_desc = right_data.find('div',class_="bookAuthorProfile__about").find_all("span")[1].text
+    print(len(author_desc))
+
+    if len(author_desc) > 1:
+        author_desc =author_desc[1].text
     else:
-        author_desc = right_data.find('div',class_="bookAuthorProfile__about").find_all("span")[0].text
+        author_desc = author_desc[0].text
 
 
 
