@@ -50,14 +50,16 @@ def find_book(url):
 
     genres = right_data.find_all('div',class_="elementList")
 
-    author_desc = right_data.find('div',class_="bookAuthorProfile__about").find_all('span')
+    reviews = soup.find('div',class_="leftContainer").find('div',{"id": "other_reviews"}).find('div',{"id": "reviews"}).find('div',{"id": "bookReviews"}).find_all('div',class_="friendReviews")
 
-    print(len(author_desc))
-
-    if len(author_desc) > 1:
-        author_desc =author_desc[1].text
-    else:
-        author_desc = author_desc[0].text
+    try:
+        author_desc = right_data.find('div',class_="bookAuthorProfile__about").find_all('span')
+        if len(author_desc) > 1:
+            author_desc =author_desc[1].text
+        else:
+            author_desc = author_desc[0].text
+    except  AttributeError:
+        author_desc = []
 
 
 
@@ -72,10 +74,21 @@ def find_book(url):
             "author_follower_count": right_data.find('div',class_="bookAuthorProfile__followerCount").text,
             "author_profile_desc": author_desc
         },
-        "book_genres": []
+        "book_genres": [],
+        "community_reviews": []
     }]
 
     for genre in genres:
         bookInfo[0]['book_genres'].append(genre.find('div',class_="left").find('a').text)
+
+    for review in reviews:
+        bookInfo[0]["community_reviews"].append({
+            "book_review": {
+                "book_reviewer_name": review.find('a',class_="left imgcol")['title'],
+                "book_reviewer_image": review.find('img')['src'],
+                "book_review_content": str(review.find('div',class_="left bodycol").find('div',class_="reviewText stacked").find('span',class_="readable").find_all('span')[0])
+            }
+        })
+    
     
     return bookInfo
