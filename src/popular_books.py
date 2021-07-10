@@ -62,8 +62,6 @@ def find_book(url):
         author_desc = []
 
 
-
-
     bookInfo = [{
         "book_name": result.find('h1',{"id":"bookTitle"}).text,
         "books_desc": result.find('div',{"id":"description"}).find_all("span")[1].text,
@@ -82,11 +80,16 @@ def find_book(url):
         bookInfo[0]['book_genres'].append(genre.find('div',class_="left").find('a').text)
 
     for review in reviews:
+        try:
+            full_book_review = review.find('div',class_="left bodycol").find('div',class_="reviewText stacked").find('span',class_="readable").find_all('span')[1].text
+        except IndexError:
+            full_book_review = []
         bookInfo[0]["community_reviews"].append({
             "book_review": {
                 "book_reviewer_name": review.find('a',class_="left imgcol")['title'],
                 "book_reviewer_image": review.find('img')['src'],
-                "book_review_content": str(review.find('div',class_="left bodycol").find('div',class_="reviewText stacked").find('span',class_="readable").find_all('span')[0])
+                "book_review_content_stacked": review.find('div',class_="left bodycol").find('div',class_="reviewText stacked").find('span',class_="readable").find_all('span')[0].text,
+                "book_review_content_full" : full_book_review,
             }
         })
     
