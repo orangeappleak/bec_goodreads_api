@@ -1,12 +1,13 @@
 import requests
 from bs4 import BeautifulSoup
+import lxml.html
 
 def getPopularCategories():
     categories = []
     url = "https://www.goodreads.com/choiceawards/best-books-2020"
 
     data = requests.get(url)
-    soup = BeautifulSoup(data.content, 'html.parser')
+    soup = BeautifulSoup(data.content, 'lxml')
     result = soup.find('div',class_="categoryContainer").find_all('div',class_="category")
     for category in result:
         categories.append({
@@ -18,7 +19,7 @@ def getPopularCategories():
 
 def getTopBooks(route):
     data = requests.get("https://www.goodreads.com/choiceawards/" + route )
-    soup = BeautifulSoup(data.content, 'html.parser')
+    soup = BeautifulSoup(data.content, 'lxml')
     result = soup.find('div',class_="pollContents").find_all('div',class_="inlineblock pollAnswer resultShown")
 
     topBooks = []
@@ -44,9 +45,11 @@ def getTopBooks(route):
 def find_book(url):
     print(url)
     data = requests.get('https://www.goodreads.com/book/show/' + url)
-    soup = BeautifulSoup(data.content,'html.parser')
-    result = soup.find('div',class_ = "leftContainer")
+    soup = BeautifulSoup(data.content,'lxml',from_encoding="utf-8")
+    result = soup.find('div',{"class": "leftContainer"})
     right_data = soup.find('div',class_="rightContainer")
+
+    print("ENcoding method :",soup.original_encoding)
 
     genres = right_data.find_all('div',class_="elementList")
 
@@ -66,6 +69,8 @@ def find_book(url):
         "book_name": result.find('h1',{"id":"bookTitle"}).text,
         "books_desc": result.find('div',{"id":"description"}).find_all("span")[1].text,
         "book_image": result.find('img',{"id":"coverImage"})['src'],
+        "book_rating_value": result.find('span',{'itemprop': 'ratingValue'}).text,
+        "book_ratings": result.find('div',id="bookMeta").find('a',class_="gr-hyperlink").text,
         "about_author": {
             "author_name": right_data.find("div",class_="bookAuthorProfile__name").find('a').text,
             "author_profile_image": right_data.find('div',class_="bookAuthorProfile__photo")['style'],
@@ -90,6 +95,7 @@ def find_book(url):
                 "book_reviewer_image": review.find('img')['src'],
                 "book_review_content_stacked": review.find('div',class_="left bodycol").find('div',class_="reviewText stacked").find('span',class_="readable").find_all('span')[0].text,
                 "book_review_content_full" : full_book_review,
+                "review_likes": review.find('span',class_="likeItContainer").find('span',class_="likesCount").text
             }
         })
     
