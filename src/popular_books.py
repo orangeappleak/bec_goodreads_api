@@ -48,8 +48,6 @@ def find_book(url):
     result = soup.find('div',{"class": "leftContainer"})
     right_data = soup.find('div',class_="rightContainer")
 
-    print("ENcoding method :",soup.original_encoding)
-
     genres = right_data.find_all('div',class_="elementList")
 
     reviews = soup.find('div',class_="leftContainer").find('div',{"id": "other_reviews"}).find('div',{"id": "reviews"}).find('div',{"id": "bookReviews"}).find_all('div',class_="friendReviews")
@@ -89,13 +87,19 @@ def find_book(url):
             full_book_review = review.find('div',class_="left bodycol").find('div',class_="reviewText stacked").find('span',class_="readable").find_all('span')[1].text
         except IndexError:
             full_book_review = []
+
+        try:
+            review_likes = review.find('span',class_="likeItContainer").find('span',class_="likesCount").text
+        except:
+            review_likes = "no likes"
+
         bookInfo[0]["community_reviews"].append({
             "book_review": {
                 "book_reviewer_name": review.find('a',class_="left imgcol")['title'],
                 "book_reviewer_image": review.find('img')['src'],
                 "book_review_content_stacked": review.find('div',class_="left bodycol").find('div',class_="reviewText stacked").find('span',class_="readable").find_all('span')[0].text,
                 "book_review_content_full" : full_book_review,
-                "review_likes": review.find('span',class_="likeItContainer").find('span',class_="likesCount").text
+                "review_likes": review_likes,
             }
         })
     
