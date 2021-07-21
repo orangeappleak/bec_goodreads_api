@@ -4,6 +4,7 @@ from flask import Flask
 from src.popular_books import getPopularCategories
 from src.popular_books import getTopBooks
 from src.popular_books import find_book
+from src.popular_books import getNewArticles
 
 main_app = Flask(__name__)
 
@@ -41,4 +42,10 @@ def getBooks(bookRoute):
 def getBookInfo(book_url):
     return jsonify({
         'book_data': find_book(book_url)
+    })
+
+@main_app.route('/articles')
+def getArticles():
+    return jsonify({
+        'articles': getNewArticles()
     })

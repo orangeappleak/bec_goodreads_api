@@ -105,3 +105,22 @@ def find_book(url):
     
     
     return bookInfo
+
+def getNewArticles():
+
+    articleInfo = []
+
+    data = requests.get('https://www.goodreads.com/news?ref=nav_brws_news')
+    soup = BeautifulSoup(data.content,'lxml',from_encoding='utf-8')
+    result = soup.find('div',class_="newsColumn").find_all('div',class_="elementListLast")
+
+    for article in result[1:]:
+        articleInfo.append({
+            "article_title": article.find('div',class_="editorialCard__body--right").find('div',class_="editorialCard__title").find('a').text,
+            "article_url": article.find('div',class_="editorialCard__body--right").find('div',class_="editorialCard__title").find('a')['href'],
+            "article_body": article.find('div',class_="editorialCard__body--right").find('div',class_="editorialCard__body").text,
+            "article_timeStamp": article.find('div',class_="editorialCard__body--right").find('div',class_ ='editorialCard__info').find('small',class_="editorialCard__timestamp").find('a').text,
+            "article_image": article.find('div',class_="editorialCard__image--left").find('a').find('img')['src'],
+        })
+
+    return articleInfo
