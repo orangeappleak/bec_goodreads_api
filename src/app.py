@@ -5,6 +5,7 @@ from src.popular_books import getPopularCategories
 from src.popular_books import getTopBooks
 from src.popular_books import find_book
 from src.popular_books import getNewArticles
+from src.popular_books import mostRead
 
 main_app = Flask(__name__)
 
@@ -48,4 +49,10 @@ def getBookInfo(book_url):
 def getArticles():
     return jsonify({
         'articles': getNewArticles()
+    })
+
+@main_app.route('/mostRead')
+def mostReadBooks():
+    return jsonify({
+        'mosReadBooks': mostRead()
     })

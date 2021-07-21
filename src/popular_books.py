@@ -124,3 +124,21 @@ def getNewArticles():
         })
 
     return articleInfo
+
+def mostRead():
+
+    mostReadBooks = []
+
+    data  = requests.get("https://www.goodreads.com/book/most_read")
+    soup = BeautifulSoup(data.content,'lxml',from_encoding = 'utf-8')
+    mostRead = soup.find('div',class_="leftContainer").find('table',class_="tableList").find_all('tr')
+
+    for tr in mostRead:
+        mostReadBooks.append({
+            "book_name": tr.find('a',class_="bookTitle").text,
+            "book_url": tr.find('a',class_="bookTitle")['href'],
+            "book_image": tr.find('img',class_="bookCover")['src'],
+            "book_author": tr.find('a',class_="authorName").find('span').text,
+        })
+        
+    return mostReadBooks
