@@ -21,9 +21,12 @@ The Book Exchange Club API aims to:
 
 ## API Endpoints
 
-- **GET /books**: Retrieve a list of available books.
-- **POST /books**: Add a new book to the system.
-- **GET /books/{id}**: Retrieve detailed information about a specific book.
-- **PUT /books/{id}**: Update information for an existing book.
-- **DELETE /books/{id}**: Remove a book from the system.
-- **GET /users/{id}/exchanges**: Retrieve exchange requests for a specific user.
+- **Endpoint**: `/`
+- **Method**: `GET`
+- **Description**: Returns a welcome message and a list of available links in the API.
+- **Response**:
+  ```html
+  <h1>This is a books API</h1>
+  <h2>available links</h2>
+  <h2>/popularCategories</h2>
+  <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
